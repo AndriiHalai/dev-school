@@ -1,11 +1,7 @@
-## About me
+# About me
+18 y.o, student of KPI willing to become a back-end developer.
 
----
-
-18 y.o, student of KPI willing to become back-end developer.
-
-## Download & Run
-
+# Download & Run
 1. Clone this repository.
 
 ```
