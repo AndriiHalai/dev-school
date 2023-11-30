@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model customers {
+  id         Int      @id @default(autoincrement())
+  first_name String?  @db.VarChar(50)
+  last_name  String?  @db.VarChar(50)
+  email      String?  @unique @db.VarChar(50)
+  birthday   String?  @db.VarChar(20)
+  orders     orders[]
+}
+
+model employees {
+  id         Int      @id @default(autoincrement())
+  first_name String?  @db.VarChar(50)
+  last_name  String?  @db.VarChar(50)
+  position   String?  @db.VarChar(100)
+  orders     orders[]
+  tasks      tasks[]
+}
+
+model orders {
+  id            Int        @id @default(autoincrement())
+  employee_id   Int?
+  customer_id   Int?
+  order_address String?    @db.VarChar(100)
+  delivery_cost Decimal?   @db.Decimal
+  order_date    DateTime?  @default(now()) @db.Date
+  customers     customers? @relation(fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  employees     employees? @relation(fields: [employee_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tasks         tasks[]
+}
+
+model products {
+  id       Int       @id @default(autoincrement())
+  name     String?   @db.VarChar(50)
+  category foodtype?
+  amount   Decimal?  @db.Decimal
+  price    Decimal?  @db.Decimal
+}
+
+model tasks {
+  order_id    Int?
+  employee_id Int?
+  id          Int        @id @default(autoincrement())
+  employees   employees? @relation(fields: [employee_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  orders      orders?    @relation(fields: [order_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+enum foodtype {
+  vegetables
+  fruits
+  grains
+  dairy
+  oils
+  eggs
+  fish
+  meat
+}
